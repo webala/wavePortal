@@ -16,8 +16,11 @@ const main = async () => {
  
 
 
-    let waveTxn = await waveContract.wave("First wave!")
-    await waveTxn.wait()
+    let waveTxn1 = await waveContract.wave("First wave!")
+    await waveTxn1.wait()
+
+    let waveTxn2 = await waveContract.wave("First wave!")
+    await waveTxn2.wait()
 
     contractBalance = await hre.ethers.provider.getBalance(
         waveContract.address
