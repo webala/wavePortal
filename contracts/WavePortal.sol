@@ -18,6 +18,8 @@ contract WavePortal {
 
     Wave[] waves;
 
+    mapping(address => uint256) public lastWavedAt;
+
     constructor() payable {
         console.log("Whatever i want");
 
@@ -25,6 +27,13 @@ contract WavePortal {
     }
 
     function wave(string memory _message) public {
+        require(
+            lastWavedAt[msg.sender] + 15 minutes < block.timestamp,
+            "Wait 15 minutes"
+        );
+
+        lastWavedAt[msg.sender] = block.timestamp;
+
         totalWaves += 1;
         waveCount[msg.sender] += 1;
         console.log("%s has waved!", msg.sender);
@@ -35,7 +44,6 @@ contract WavePortal {
         seed = (block.timestamp + block.difficulty + seed) % 100;
 
         console.log("Random # generated: %d", seed);
-
 
         //GIve a 50% chance that the user wins the price
 
@@ -54,8 +62,6 @@ contract WavePortal {
         }
 
         emit NewWave(msg.sender, block.timestamp, _message);
-
-        
     }
 
     function getAllWaves() public view returns (Wave[] memory) {
